@@ -1,14 +1,16 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const connectDB = require('./db'); // Подключение базы
+const connectDB = require('./db'); // Подключение базы данных
 const Show = require('./models/Show'); // Модель сериалов
 
 const app = express();
 
+// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
+// Подключение к базе данных
 connectDB();
 
 // API endpoints
@@ -31,5 +33,6 @@ app.post('/api/shows', async (req, res) => {
   }
 });
 
+// Запуск сервера
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
