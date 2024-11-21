@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 
+// Подключение к MongoDB
 const connectDB = async () => {
   try {
-    const mongoURI = process.env.MONGO_URI;
+    const mongoURI = process.env.MONGO_URI; // Получаем строку подключения из .env
     await mongoose.connect(mongoURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
