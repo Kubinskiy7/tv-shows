@@ -1,31 +1,34 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const Show = require('./models/Show');
+const connectDB = require('./db'); // Подключение базы
+const Show = require('./models/Show'); // Модель сериалов
 
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
-// Подключение к базе данных
-const mongoURI = process.env.MONGO_URI || 'your-mongodb-connection-string';
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error(err));
+connectDB();
 
 // API endpoints
 app.get('/api/shows', async (req, res) => {
-  const shows = await Show.find();
-  res.json(shows);
+  try {
+    const shows = await Show.find();
+    res.json(shows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 app.post('/api/shows', async (req, res) => {
-  const newShow = new Show(req.body);
-  const savedShow = await newShow.save();
-  res.json(savedShow);
+  try {
+    const show = new Show(req.body);
+    await show.save();
+    res.json(show);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 const PORT = process.env.PORT || 3000;
