@@ -1,16 +1,15 @@
 const mongoose = require('mongoose');
 
+// Схема для сериалов
 const ShowSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  poster: { type: String, required: true },
+  title: { type: String, required: true }, // Название сериала
   seasons: [
     {
-      seasonNumber: Number,
+      number: { type: Number, required: true }, // Номер сезона
       episodes: [
         {
-          episodeNumber: Number,
-          title: String,
-          rating: Number,
+          title: { type: String, required: true }, // Название серии
+          rating: { type: Number, required: true }, // Рейтинг серии
         },
       ],
     },
