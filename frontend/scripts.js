@@ -1,4 +1,4 @@
-const apiURL = 'https://your-backend-url.onrender.com/api/shows'; // Ссылка на ваш backend
+const apiURL = 'https://tv-shows-backend.onrender.com/api/shows'; // Ваш URL Render
 
 // Получение списка сериалов
 fetch(apiURL)
