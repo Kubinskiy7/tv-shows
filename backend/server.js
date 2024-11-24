@@ -60,3 +60,33 @@ app.post('/api/shows/:id/seasons', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Добавление нового эпизода к сезону
+app.post('/api/shows/:id/seasons/:seasonNumber/episodes', async (req, res) => {
+  try {
+    const { id, seasonNumber } = req.params; // ID сериала и номер сезона
+    const newEpisode = req.body; // Новый эпизод из тела запроса
+
+    // Находим сериал по ID
+    const show = await Show.findById(id);
+    if (!show) {
+      return res.status(404).json({ error: 'Сериал не найден' });
+    }
+
+    // Находим нужный сезон
+    const season = show.seasons.find((s) => s.number === parseInt(seasonNumber));
+    if (!season) {
+      return res.status(404).json({ error: 'Сезон не найден' });
+    }
+
+    // Добавляем новый эпизод
+    season.episodes.push(newEpisode);
+
+    // Сохраняем изменения
+    await show.save();
+
+    res.json(show);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
