@@ -36,3 +36,27 @@ app.post('/api/shows', async (req, res) => {
 // Запуск сервера
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// Добавление нового сезона к сериалу
+app.post('/api/shows/:id/seasons', async (req, res) => {
+  try {
+    const { id } = req.params; // ID сериала
+    const newSeason = req.body; // Новый сезон из тела запроса
+
+    // Находим сериал по ID
+    const show = await Show.findById(id);
+    if (!show) {
+      return res.status(404).json({ error: 'Сериал не найден' });
+    }
+
+    // Добавляем новый сезон
+    show.seasons.push(newSeason);
+
+    // Сохраняем изменения
+    await show.save();
+
+    res.json(show);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
